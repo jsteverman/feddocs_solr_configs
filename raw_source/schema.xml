@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="Raw Source" version="1.5">
+  <types>
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
+
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
+    <fieldtype name="binary" class="solr.BinaryField"/>
+    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
+    <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0"/>
+
+    <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true" precisionStep="6" positionIncrementGap="0"/>
+    <fieldType name="text" class="solr.TextField" positionIncrementGap="100"></fieldType>
+
+
+ </types>
+ <fields>
+   <field name="_version_" type="long" indexed="true" stored="true"/>
+   <field name="id" type="string" indexed="true" stored="true" required="true" />
+   <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
+
+   <field name="file_name" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="line_number" type="string" indexed="true" stored="true" multiValued="false"/>
+
+   <field name="text" type="text" indexed="false" stored="true" multiValued="true"/>
+   
+   <!-- uncomment the following to ignore any fields that don't already match an existing 
+        field name or dynamic field, rather than reporting them as an error. 
+        alternately, change the type="ignored" to some other type e.g. "text" if you want 
+        unknown fields indexed and/or stored by default --> 
+   <!--dynamicField name="*" type="ignored" multiValued="true" /-->
+   <dynamicField name="*" type="text" multiValued="true" indexed="true"/>
+   
+ </fields>
+
+ <uniqueKey>id</uniqueKey>
+
+
+</schema>
