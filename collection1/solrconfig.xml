@@ -61,7 +61,6 @@
     <defaultQuery>solr</defaultQuery>
   </admin>
 
-
   <!-- SearchHandler
 
        http://wiki.apache.org/solr/SearchHandler
@@ -112,13 +111,14 @@
          subject_addl_t^50
          title_series_unstem_search^25
          title_series_t^10
+         isbn_t
+         text
+
          oclcnum_t
          sudoc_unstem_search^750
          sudoc_t^500
          sudoc_display
          relationships
-         isbn_t
-         text
        </str>
        <str name="pf">
          title_unstem_search^1000000
@@ -133,8 +133,6 @@
          subject_unstem_search^7500
          subject_topic_facet^6250
          subject_t^5000
-         sudoc_unstem_search^100000
-         sudoc_t^50000
          author_unstem_search^2500
          author_addl_unstem_search^2500
          author_t^1000
@@ -144,6 +142,8 @@
          title_series_unstem_search^250
          title_series_t^100
          text^10
+         sudoc_unstem_search^100000
+         sudoc_t^50000
        </str>
        <str name="author_qf">
          author_unstem_search^200
@@ -213,20 +213,16 @@
          id, 
          score,
          author_display,
-         enumchron_display,
          author_vern_display, 
          format, 
          isbn_t, 
          language_facet, 
          lc_callnum_display,
-	 marc_display,
          material_type_display, 
          oclcnum_t,
          published_display,
          published_vern_display,
          pub_date,
-	 sudoc_display,
-	 text,
          title_display,
          title_vern_display,
          subject_topic_facet,
@@ -236,6 +232,10 @@
          subtitle_vern_display,
          url_fulltext_display,
          url_suppl_display,
+         enumchron_display,
+         sudoc_display,
+         marc_display,
+         ht_ids
        </str>
 
        <str name="facet">true</str>
@@ -319,84 +319,18 @@
 
   <updateHandler class="solr.DirectUpdateHandler2">
 
-    <!-- Enables a transaction log, used for real-time get, durability, and
-         and solr cloud replica recovery.  The log can grow as big as
-         uncommitted changes to the index, so use of a hard autoCommit
-         is recommended (see below).
-         "dir" - the target directory for transaction logs, defaults to the
-                solr data directory.  --> 
-    <updateLog>
+   <updateLog>
       <str name="dir">${solr.ulog.dir:}</str>
     </updateLog>
  
-    <!-- AutoCommit
-
-         Perform a hard commit automatically under certain conditions.
-         Instead of enabling autoCommit, consider using "commitWithin"
-         when adding documents. 
-
-         http://wiki.apache.org/solr/UpdateXmlMessages
-
-         maxDocs - Maximum number of documents to add since the last
-                   commit before automatically triggering a new commit.
-
-         maxTime - Maximum amount of time in ms that is allowed to pass
-                   since a document was added before automatically
-                   triggering a new commit. 
-         openSearcher - if false, the commit causes recent index changes
-           to be flushed to stable storage, but does not cause a new
-           searcher to be opened to make those changes visible.
-
-         If the updateLog is enabled, then it's highly recommended to
-         have some sort of hard autoCommit to limit the log size.
-      -->
      <autoCommit> 
        <maxTime>${solr.autoCommit.maxTime:15000}</maxTime> 
        <openSearcher>false</openSearcher> 
      </autoCommit>
 
-    <!-- softAutoCommit is like autoCommit except it causes a
-         'soft' commit which only ensures that changes are visible
-         but does not ensure that data is synced to disk.  This is
-         faster and more near-realtime friendly than a hard commit.
-      -->
-
      <autoSoftCommit> 
        <maxTime>${solr.autoSoftCommit.maxTime:-1}</maxTime> 
      </autoSoftCommit>
-
-    <!-- Update Related Event Listeners
-         
-         Various IndexWriter related events can trigger Listeners to
-         take actions.
-
-         postCommit - fired after every commit or optimize command
-         postOptimize - fired after every optimize command
-      -->
-    <!-- The RunExecutableListener executes an external command from a
-         hook such as postCommit or postOptimize.
-         
-         exe - the name of the executable to run
-         dir - dir to use as the current working directory. (default=".")
-         wait - the calling thread waits until the executable returns. 
-                (default="true")
-         args - the arguments to pass to the program.  (default is none)
-         env - environment variables to set.  (default is none)
-      -->
-    <!-- This example shows how RunExecutableListener could be used
-         with the script based replication...
-         http://wiki.apache.org/solr/CollectionDistribution
-      -->
-    <!--
-       <listener event="postCommit" class="solr.RunExecutableListener">
-         <str name="exe">solr/bin/snapshooter</str>
-         <str name="dir">.</str>
-         <bool name="wait">true</bool>
-         <arr name="args"> <str>arg1</str> <str>arg2</str> </arr>
-         <arr name="env"> <str>MYVAR=val1</str> </arr>
-       </listener>
-      -->
-
   </updateHandler>
  
   <!-- for requests to get a single document; use id=666 instead of q=id:666 -->
@@ -499,11 +433,9 @@
         language_facet, 
         lc_callnum_display,
         material_type_display, 
-	marc_display,
         published_display,
         published_vern_display,
         pub_date,
-	text,
         title_display,
         title_vern_display,
         subject_topic_facet,
@@ -513,6 +445,7 @@
         subtitle_vern_display,
         url_fulltext_display,
         url_suppl_display,
+        marc_display
       </str>
       
       <str name="facet">true</str>
