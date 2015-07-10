@@ -236,7 +236,8 @@
    <field name="marc_display" type="string" indexed="false" stored="true" multiValued="false"/>
    <field name="source_records" type="string" indexed="false" stored="true" multiValued="true"/>
    <field name="relationships" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="ht_ids" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="ht_ids_fv" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="ht_ids_lv" type="string" indexed="true" stored="true" multiValued="true"/>
   
    <!-- these display fields are NOT multi-valued -->
    <field name="oclcnum_t" type="string" indexed="true" stored="true" multiValued="false"/>

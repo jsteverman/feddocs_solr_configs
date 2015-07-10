@@ -215,7 +215,8 @@
          enumchron_display,
          sudoc_display,
          marc_display,
-         ht_ids
+         ht_ids_fv,
+         ht_ids_lv
        </str>
 
        <str name="facet">true</str>
