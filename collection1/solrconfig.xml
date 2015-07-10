@@ -215,6 +215,7 @@
          enumchron_display,
          sudoc_display,
          marc_display,
+         ht_availability,
          ht_ids_fv,
          ht_ids_lv
        </str>
