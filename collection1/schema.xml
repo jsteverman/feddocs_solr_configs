@@ -239,6 +239,7 @@
    <field name="ht_availability" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="ht_ids_fv" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="ht_ids_lv" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="gd_ids" type="string" indexed="true" stored="true" multiValued="true"/>
   
    <!-- these display fields are NOT multi-valued -->
    <field name="oclcnum_t" type="string" indexed="true" stored="true" multiValued="false"/>
