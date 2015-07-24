@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE config [
+<!ENTITY spstemmer "solr.SnowballPorterFilterFactory">
+<!ENTITY kstemmer "solr.KStemFilterFactory">
+<!ENTITY stemmer "&spstemmer;">
+<!ENTITY char_expansion_file "token_fixing_charfilter.txt">
+<!ENTITY synonym_file "syn.txt">
+<!ENTITY tpig "1000">
+<!ENTITY min_num_length "8">
+<!ENTITY mnl_minus_two "6">
+<!ENTITY max_num_length "14">
+]>
 <schema name="Feddocs Index" version="1.5">
   <types>
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
