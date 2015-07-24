@@ -196,6 +196,20 @@
     See http://wiki.apache.org/solr/SpatialSearch
    -->
     <fieldtype name="geohash" class="solr.GeoHashField"/>
+    <!-- mainly for ISBN/OCLC/ISSN -->
+    <fieldtype name="numericID" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
+    <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.TrimFilterFactory" />
+        <filter class="solr.PatternReplaceFilterFactory" pattern="^.*?(\p{N}[\p{N}\-\.]{&mnl_minus_two;,}[xX]?).*$" replacement="***$1"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="^[^\*].*$" replacement=""/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="^\*\*\*" replacement=""/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}x]" replacement="" replace="all"/>
+        <filter class="solr.LengthFilterFactory" min="&min_num_length;" max="&max_num_length;"/>
+        <!--<filter class="solr.PatternReplaceFilterFactory" pattern="^0*" replacement=""/>-->
+    </analyzer>
+    </fieldtype>
  </types>
 
 
@@ -241,7 +255,7 @@
    <field name="ht_ids_lv" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="gd_ids" type="string" indexed="true" stored="true" multiValued="true"/>
   
-   <field name="oclcnum_t" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="oclcnum_t" type="numericID" indexed="true" stored="true" multiValued="true"/>
    <field name="sudoc_display" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="title" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="title_display" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -252,7 +266,7 @@
    <field name="author_vern_display" type="string" indexed="true" stored="true" multiValued="true"/>
    
    <!-- these fields are also used for display, so they must be stored -->
-   <field name="isbn_t" type="text" indexed="true" stored="true" multiValued="true"/>
+   <field name="isbn_t" type="numericID" indexed="true" stored="true" multiValued="true"/>
    <field name="language_facet" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="subject_topic_facet" type="string" indexed="true" stored="true" multiValued="true" />
    <field name="subject_era_facet" type="string" indexed="true" stored="true" multiValued="true" />
