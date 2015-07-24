@@ -210,8 +210,29 @@
         <!--<filter class="solr.PatternReplaceFilterFactory" pattern="^0*" replacement=""/>-->
     </analyzer>
     </fieldtype>
- </types>
+    <fieldType name="exactish" class="solr.TextField" positionIncrementGap="&tpig;">
+    <analyzer>
+          <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="&char_expansion_file;"/>
 
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.TrimFilterFactory"/>
+
+        <!-- Anything punctuation that should be turned into a space (probably just - and :) needs
+             to do so here -->
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="([:\-])" replacement=" " replace="all"
+                />
+        <filter class="solr.PatternReplaceFilterFactory"
+                pattern="([\p{Punct}])" replacement="" replace="all"
+                />
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <filter class="solr.CJKWidthFilterFactory"/>
+        <filter class="solr.CJKBigramFilterFactory"/>
+
+    </analyzer>
+    </fieldType>
+ </types>
 
 
  <fields>
@@ -242,7 +263,7 @@
    <field name="_version_" type="long" indexed="true" stored="true"/>
    <field name="id" type="string" indexed="true" stored="true" required="true" />
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
-   <field name="enumchron_display" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="enumchron_display" type="exactish" indexed="true" stored="true" multiValued="false"/>
 
    <!-- default, catch all search field -->
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
