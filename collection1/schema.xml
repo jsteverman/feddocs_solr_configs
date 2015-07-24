@@ -3,7 +3,7 @@
 <!ENTITY spstemmer "solr.SnowballPorterFilterFactory">
 <!ENTITY kstemmer "solr.KStemFilterFactory">
 <!ENTITY stemmer "&spstemmer;">
-<!ENTITY char_expansion_file "token_fixing_charfilter.txt">
+<!--<!ENTITY char_expansion_file "token_fixing_charfilter.txt"> -->
 <!ENTITY synonym_file "syn.txt">
 <!ENTITY tpig "1000">
 <!ENTITY min_num_length "8">
@@ -224,7 +224,7 @@
     <fieldType name="exactish" class="solr.TextField" positionIncrementGap="&tpig;">
     <analyzer>
           <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
-        <charFilter class="solr.MappingCharFilterFactory" mapping="&char_expansion_file;"/>
+        <!-- <charFilter class="solr.MappingCharFilterFactory" mapping="&char_expansion_file;"/> -->
 
         <tokenizer class="solr.KeywordTokenizerFactory"/>
         <filter class="solr.TrimFilterFactory"/>
