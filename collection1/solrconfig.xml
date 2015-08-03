@@ -9,6 +9,9 @@
 
   <indexConfig>
     <lockType>${solr.lock.type:single}</lockType>
+    <ramBufferSizeMB>960</ramBufferSizeMB>
+    <mergeFactor>40</mergeFactor>
+    <termIndexInterval>1024</termIndexInterval>
   </indexConfig>
  
   <lib dir="../lib/contrib/analysis-extras/lib" />
