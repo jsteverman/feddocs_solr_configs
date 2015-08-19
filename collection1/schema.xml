@@ -312,6 +312,7 @@
    <!-- format is used for facet, display, and choosing which partial to use for the show view, so it must be stored and indexed -->
    <field name="format" type="string" indexed="true" stored="true" multiValued="true"/>
 
+   <field name="suppressed" type="boolean" indexed="true" stored="true" default="false"/>
    
 
    <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
