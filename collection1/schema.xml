@@ -313,7 +313,17 @@
    <field name="format" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <field name="suppressed" type="boolean" indexed="true" stored="true" default="false"/>
-   
+
+   <!-- viaf and normalized fields -->
+   <field name="publisher_viaf_ids" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="publisher_headings" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="publisher_normalized" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="author_viaf_ids" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="author_headings" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="author_normalized" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="author_addl_viaf_ids" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="author_addl_headings" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <field name="author_addl_normalized" type="string" indexed="true" stored="true" multiValued="true"/>   
 
    <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
         will be used if the name matches any of the patterns.
