@@ -168,11 +168,13 @@
          publisher_headings^2000
          publisher_t^1000
          publisher_viaf_ids^5000
+         publisher_unstem_search^200
        </str>
        <str name="publisher_pf">
          publisher_headings^2000
          publisher_t^1000
          publisher_viaf_ids^5000
+         publisher_unstem_search^200
        </str>
        <str name="subject_qf">
          subject_topic_unstem_search^200

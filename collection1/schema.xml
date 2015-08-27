@@ -406,6 +406,7 @@
    <copyField source="subject_topic_facet" dest="subject_topic_unstem_search"/>
    <copyField source="sudoc_display" dest="sudoc_t"/>
    <copyField source="sudoc_t" dest="sudoc_unstem_search"/>
+   <copyField source="publisher_t" dest="publisher_unstem_search"/>
    
    <!-- sort fields -->
    <copyField source="pub_date" dest="pub_date_sort"/>
