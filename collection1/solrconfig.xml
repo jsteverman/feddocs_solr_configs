@@ -58,7 +58,7 @@
          will be overridden by parameters in the request
       -->
      <lst name="defaults">
-       <str name="defType">dismax</str>
+       <str name="defType">edismax</str>
        <str name="echoParams">explicit</str>
        <int name="rows">10</int>
 
@@ -76,7 +76,7 @@
        <str name="qf">
          title_unstem_search^100000
          subtitle_unstem_search^25000
-         title_t^25000
+         title_t^250000
          subtitle_t^5000
          title_addl_unstem_search^5000
          title_addl_t^2500
@@ -106,7 +106,7 @@
        <str name="pf">
          title_unstem_search^1000000
          subtitle_unstem_search^250000
-         title_t^250000
+         title_t^2500000
          subtitle_t^50000
          title_addl_unstem_search^50000
          title_addl_t^25000
