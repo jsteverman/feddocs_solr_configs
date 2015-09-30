@@ -405,7 +405,7 @@
    <copyField source="subject_addl_t" dest="subject_addl_unstem_search"/>
    <copyField source="subject_topic_facet" dest="subject_topic_unstem_search"/>
    <copyField source="sudoc_display" dest="sudoc_t"/>
-   <copyField source="sudoc_t" dest="sudoc_unstem_search"/>
+   <copyField source="sudoc_display" dest="sudoc_unstem_search"/>
    <copyField source="publisher_t" dest="publisher_unstem_search"/>
    
    <!-- sort fields -->
@@ -415,9 +415,11 @@
    <!-- spellcheck fields -->
    <!-- default spell check;  should match fields for default request handler -->
    <!-- it won't work with a copy of a copy field -->
+   <copyField source="title" dest="spell"/>
    <copyField source="*_t" dest="spell"/>
    <copyField source="*_facet" dest="spell"/>
    <!-- title spell check;  should match fields for title request handler -->
+   <copyField source="title" dest="title_spell"/>
    <copyField source="title_t" dest="title_spell"/>
    <copyField source="subtitle_t" dest="title_spell"/>
    <copyField source="addl_titles_t" dest="title_spell"/>
