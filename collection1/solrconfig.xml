@@ -250,6 +250,7 @@
        <str name="facet.field">lc_b4cutter_facet</str>
        <str name="facet.field">language_facet</str>
        <str name="facet.field">pub_date</str>
+       <str name="facet.field">ht_availability</str>
        <str name="facet.field">subject_era_facet</str>
        <str name="facet.field">subject_geo_facet</str>
        <str name="facet.field">subject_topic_facet</str>
