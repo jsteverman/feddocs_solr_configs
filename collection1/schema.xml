@@ -411,7 +411,7 @@
    <copyField source="publisher_t" dest="publisher_unstem_search"/>
    
    <!-- sort fields -->
-   <copyField source="pub_date" dest="pub_date_sort"/>
+   <!-- <copyField source="pub_date" dest="pub_date_sort"/> -->
    
         
    <!-- spellcheck fields -->
