@@ -96,7 +96,6 @@
          title_series_t^10
          isbn_t
          text
-
          oclcnum_t
          sudoc_unstem_search^750
          sudoc_t^500

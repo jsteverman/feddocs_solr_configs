@@ -287,7 +287,7 @@
    <field name="ht_ids_lv" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="gd_ids" type="string" indexed="true" stored="true" multiValued="true"/>
   
-   <field name="oclcnum_t" type="numericID" indexed="true" stored="true" multiValued="true"/>
+   <field name="oclcnum_t" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="sudoc_display" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="title" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="title_display" type="string" indexed="true" stored="true" multiValued="true"/>
