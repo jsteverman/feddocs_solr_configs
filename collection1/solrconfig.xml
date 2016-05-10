@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <config>
-  <luceneMatchVersion>LUCENE_40</luceneMatchVersion>
+  <luceneMatchVersion>5.0.0</luceneMatchVersion>
   <!--  The DirectoryFactory to use for indexes.
         solr.StandardDirectoryFactory, the default, is filesystem based.
         solr.RAMDirectoryFactory is memory based, not persistent, and doesn't work with replication. -->
@@ -84,7 +84,6 @@
          title_added_entry_t^1250
          subject_topic_unstem_search^1000
          subject_unstem_search^750
-         subject_topic_facet^625
          subject_t^500
          author_unstem_search^250
          author_addl_unstem_search^250
@@ -94,13 +93,9 @@
          subject_addl_t^50
          title_series_unstem_search^25
          title_series_t^10
-         isbn_t
          text
-         oclcnum_t
          sudoc_unstem_search^750
          sudoc_t^500
-         sudoc_display
-         relationships
        </str>
        <str name="pf">
          title_unstem_search^1000000
