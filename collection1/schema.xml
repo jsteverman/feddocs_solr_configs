@@ -275,6 +275,7 @@
    <field name="id" type="string" indexed="true" stored="true" required="true" />
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
    <field name="enumchron_display" type="exactish" indexed="true" stored="true" multiValued="false"/>
+   <field name="series" type="string" indexed="true" stored="true" multiValued="false"/>
 
    <!-- default, catch all search field -->
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
