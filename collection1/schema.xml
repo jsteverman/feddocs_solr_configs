@@ -276,6 +276,8 @@
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
    <field name="enumchron_display" type="exactish" indexed="true" stored="true" multiValued="false"/>
    <field name="series" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="author_lccns" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="added_entry_lccns" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <!-- default, catch all search field -->
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
