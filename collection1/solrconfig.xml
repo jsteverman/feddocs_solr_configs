@@ -371,7 +371,10 @@
         ht_availability,
         ht_ids_fv,
         ht_ids_lv,
-        enumchron_display
+        enumchron_display,
+        deprecated_timestamp,
+        deprecated_reason,
+        successors
       </str>
       <str name="rows">1</str>
       <str name="q">{!raw f=id v=$id}</str> <!-- use id=666 instead of q=id:666 -->
