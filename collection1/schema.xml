@@ -1,475 +1,266 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
+
 <!DOCTYPE config [
-<!ENTITY spstemmer "solr.SnowballPorterFilterFactory">
-<!ENTITY kstemmer "solr.KStemFilterFactory">
-<!ENTITY stemmer "&spstemmer;">
-<!--<!ENTITY char_expansion_file "token_fixing_charfilter.txt"> -->
-<!ENTITY synonym_file "syn.txt">
-<!ENTITY tpig "1000">
-<!ENTITY min_num_length "8">
-<!ENTITY mnl_minus_two "6">
-<!ENTITY max_num_length "14">
-]>
-<schema name="Feddocs Index" version="1.5">
-  <types>
-    <fieldType name="string" class="solr.StrField" sortMissingLast="true" omitNorms="true"/>
-
-    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" omitNorms="true"/>
-    <fieldtype name="binary" class="solr.BinaryField"/>
-    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" omitNorms="true" positionIncrementGap="0"/>
-    <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0"/>
-
-    <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true" precisionStep="6" positionIncrementGap="0"/>
-
-    <fieldType name="pint" class="solr.IntField" omitNorms="true"/>
-    <fieldType name="plong" class="solr.LongField" omitNorms="true"/>
-    <fieldType name="pfloat" class="solr.FloatField" omitNorms="true"/>
-    <fieldType name="pdouble" class="solr.DoubleField" omitNorms="true"/>
-    <fieldType name="pdate" class="solr.DateField" sortMissingLast="true" omitNorms="true"/>
-    <fieldType name="random" class="solr.RandomSortField" indexed="true" />
-    <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
-       <analyzer>
-         <tokenizer class="solr.StandardTokenizerFactory"/>
-         <filter class="solr.ICUFoldingFilterFactory" />
-         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
-         <filter class="solr.SnowballPorterFilterFactory" language="English" />
-       </analyzer>
-     </fieldType>
-    <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
-      <analyzer>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-      </analyzer>
-    </fieldType>
-    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                enablePositionIncrements="true"
-                />
-        <filter class="solr.LowerCaseFilterFactory"/>
-	<filter class="solr.EnglishPossessiveFilterFactory"/>
-        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.PorterStemFilterFactory"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                enablePositionIncrements="true"
-                />
-        <filter class="solr.LowerCaseFilterFactory"/>
-	<filter class="solr.EnglishPossessiveFilterFactory"/>
-        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.PorterStemFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <fieldType name="text_en_splitting" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
-      <analyzer type="index">
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                enablePositionIncrements="true"
-                />
-        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.PorterStemFilterFactory"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.StopFilterFactory"
-                ignoreCase="true"
-                words="lang/stopwords_en.txt"
-                enablePositionIncrements="true"
-                />
-        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="1"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.PorterStemFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <fieldType name="text_en_splitting_tight" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
-      <analyzer>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_en.txt"/>
-        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="0" generateNumberParts="0" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
-        <filter class="solr.EnglishMinimalStemFilterFactory"/>
-        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <fieldType name="text_general_rev" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true"
-           maxPosAsterisk="3" maxPosQuestion="2" maxFractionAsterisk="0.33"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" >
-      <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
-        <filter class="solr.StandardFilterFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <fieldType name="alphaOnlySort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
-      <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory" />
-        <!-- The TrimFilter removes any leading or trailing whitespace -->
-        <filter class="solr.TrimFilterFactory" />
-        <filter class="solr.PatternReplaceFilterFactory"
-                pattern="([^a-z])" replacement="" replace="all"
-        />
-      </analyzer>
-    </fieldType>
-    
-    <fieldtype name="phonetic" stored="false" indexed="true" class="solr.TextField" >
-      <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.DoubleMetaphoneFilterFactory" inject="false"/>
-      </analyzer>
-    </fieldtype>
-
-    <fieldtype name="payloads" stored="false" indexed="true" class="solr.TextField" >
-      <analyzer>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.DelimitedPayloadTokenFilterFactory" encoder="float"/>
-      </analyzer>
-    </fieldtype>
-
-    <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
-      <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory" />
-      </analyzer>
-    </fieldType>
-
-    <fieldType name="text_path" class="solr.TextField" positionIncrementGap="100">
-      <analyzer>
-        <tokenizer class="solr.PathHierarchyTokenizerFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
-
-    <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
-
-    <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
-    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
-
-   <!--
-    A Geohash is a compact representation of a latitude longitude pair in a single field.
-    See http://wiki.apache.org/solr/SpatialSearch
-   -->
-    <fieldtype name="geohash" class="solr.GeoHashField"/>
-    <!-- mainly for ISBN/OCLC/ISSN -->
-    <fieldtype name="numericID" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
-    <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.TrimFilterFactory" />
-        <filter class="solr.PatternReplaceFilterFactory" pattern="^.*?(\p{N}[\p{N}\-\.]{&mnl_minus_two;,}[xX]?).*$" replacement="***$1"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="^[^\*].*$" replacement=""/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="^\*\*\*" replacement=""/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}x]" replacement="" replace="all"/>
-        <filter class="solr.LengthFilterFactory" min="&min_num_length;" max="&max_num_length;"/>
-        <!--<filter class="solr.PatternReplaceFilterFactory" pattern="^0*" replacement=""/>-->
-    </analyzer>
-    </fieldtype>
-    <fieldType name="exactish" class="solr.TextField" positionIncrementGap="&tpig;">
-    <analyzer>
-          <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
-        <!-- <charFilter class="solr.MappingCharFilterFactory" mapping="&char_expansion_file;"/> -->
-
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.TrimFilterFactory"/>
-
-        <!-- Anything punctuation that should be turned into a space (probably just - and :) needs
-             to do so here -->
-        <filter class="solr.PatternReplaceFilterFactory"
-                pattern="([:\-])" replacement=" " replace="all"
-                />
-        <filter class="solr.PatternReplaceFilterFactory"
-                pattern="([\p{Punct}])" replacement="" replace="all"
-                />
-        <filter class="solr.ICUFoldingFilterFactory"/>
-        <filter class="solr.CJKWidthFilterFactory"/>
-        <filter class="solr.CJKBigramFilterFactory"/>
-
-    </analyzer>
-    </fieldType>
- </types>
 
 
- <fields>
+  <!-- Stemmers -->
+  <!ENTITY snowball_stemmer SYSTEM "lang/snowball_stemmer.xml">
+  <!ENTITY kstemmer SYSTEM "lang/kstemmer.xml">
+  <!ENTITY hunspellstemmer SYSTEM "lang/hunspellstemmer.xml">
+
+  <!-- Variables to be inserted later or in included files -->
+  <!ENTITY stemmer "&kstemmer;">
+
+  <!-- External Files -->
+  <!ENTITY char_expansion_file "schema/token_fixing_charfilter.txt">
+  <!ENTITY synonym_file "syn.txt">
+
+  <!-- Position increment gap for text fields -->
+  <!ENTITY tpig "1000">
+
+  <!-- Min/Max length of a numericIDID field -->
+  <!ENTITY min_numid_length "5">
+  <!ENTITY min_numid_length_minus_two "3"> <!-- can't compute in XML; change it when you change min_num_length -->
+  <!ENTITY max_numid_length "14">
+
+
+  <!-- Load up the field type definitions -->
+
+
+  <!ENTITY primative_types  SYSTEM "schema/primative_types.xml">
+
+  <!ENTITY basic_text_chain SYSTEM "schema/basic_text_chain.xml">
+  <!ENTITY basic_text_chain_with_synonyms SYSTEM "schema/basic_text_chain_with_synonyms.xml">
+  <!ENTITY text_types       SYSTEM "schema/text_types.xml">
+  <!ENTITY numeric_types    SYSTEM "schema/numeric_types.xml">
+  <!ENTITY delimited_types  SYSTEM "schema/delimited_types.xml">
+
+  <!ENTITY library_types    SYSTEM "schema/library_types.xml">
+
+  <!-- ...and the dynanic fields -->
+<!--  <!ENTITY dynamic_fields    SYSTEM "schema/dynamic_fields.xml">-->
+
+
+  ]>
+
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<!--
+ This is the Solr schema file. This file should be named "schema.xml" and
+ should be in the conf directory under the solr home
+ (i.e. ./solr/conf/schema.xml by default)
+ or located where the classloader for the Solr webapp can find it.
+
+ This example schema is the recommended starting point for users.
+ It should be kept correct and concise, usable out-of-the-box.
+
+ For more information, on how to customize this file, please see
+ http://wiki.apache.org/solr/SchemaXml
+-->
+
+<schema name="feddocs_index" version="0.1">
+  <!-- attribute "name" is the name of this schema and is only used for display purposes.
+       version="x.y" is Solr's version number for the schema syntax and
+       semantics.  It should not normally be changed by applications.
+
+       1.0: multiValued attribute did not exist, all fields are multiValued
+            by nature
+       1.1: multiValued attribute introduced, false by default
+       1.2: omitTermFreqAndPositions attribute introduced, true by default
+            except for text fields.
+       1.3: removed optional field compress feature
+       1.4: autoGeneratePhraseQueries attribute introduced to drive QueryParser
+            behavior when a single string produces multiple tokens.  Defaults
+            to off for version >= 1.4
+       1.5: omitNorms defaults to true for primitive field types
+            (int, float, boolean, string...)
+       1.6: useDocValuesAsStored defaults to true.
+  -->
+
+
+  <!-- Load up the field types -->
+  &primative_types;
+  &text_types;
+  &numeric_types;
+  &library_types;
+  &delimited_types;
+
+
    <!-- Valid attributes for fields:
      name: mandatory - the name for the field
-     type: mandatory - the name of a previously defined type from the 
-       <types> section
+     type: mandatory - the name of a field type from the
+       <types> fieldType section
      indexed: true if this field should be indexed (searchable or sortable)
      stored: true if this field should be retrievable
+     docValues: true if this field should have doc values. Doc values are
+       useful for faceting, grouping, sorting and function queries. Although not
+       required, doc values will make the index faster to load, more
+       NRT-friendly and more memory-efficient. They however come with some
+       limitations: they are currently only supported by StrField, UUIDField
+       and all Trie*Fields, and depending on the field type, they might
+       require the field to be single-valued, be required or have a default
+       value (check the documentation of the field type you're interested in
+       for more information)
      multiValued: true if this field may contain multiple values per document
      omitNorms: (expert) set to true to omit the norms associated with
        this field (this disables length normalization and index-time
        boosting for the field, and saves some memory).  Only full-text
        fields or fields that need an index-time boost need norms.
+       Norms are omitted for primitive (non-analyzed) types by default.
      termVectors: [false] set to true to store the term vector for a
        given field.
        When using MoreLikeThis, fields used for similarity should be
        stored for best performance.
-     termPositions: Store position information with the term vector.  
+     termPositions: Store position information with the term vector.
        This will increase storage costs.
-     termOffsets: Store offset information with the term vector. This 
+     termOffsets: Store offset information with the term vector. This
        will increase storage costs.
+     required: The field is required.  It will throw an error if the
+       value does not exist
      default: a value that should be used if no value is specified
        when adding a document.
    -->
 
-   <!-- NOTE: this is not a full list of fields in the index; dynamic fields are also used -->
-   <field name="_version_" type="long" indexed="true" stored="true"/>
-   <field name="id" type="string" indexed="true" stored="true" required="true" />
-   <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
-   <field name="enumchron_display" type="exactish" indexed="true" stored="true" multiValued="false"/>
-   <field name="series" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="author_lccns" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="added_entry_lccns" type="string" indexed="true" stored="true" multiValued="true"/>
 
-   <!-- default, catch all search field -->
-   <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
+   <!-- see https://www.elastic.co/blog/practical-bm25-part-2-the-bm25-algorithm-and-its-variables -->
    
-   <field name="marc_display" type="string" indexed="false" stored="true" multiValued="false"/>
-   <field name="source_records" type="string" indexed="false" stored="true" multiValued="true"/>
-   <field name="relationships" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="ht_availability" type="string" indexed="true" stored="true" multiValued="false" default="none"/>
-   <field name="ht_ids_fv" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="ht_ids_lv" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="gd_ids" type="string" indexed="true" stored="true" multiValued="true"/>
-  
-   <field name="oclcnum_t" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="sudoc_display" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="title" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="title_display" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="title_vern_display" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="subtitle_display" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="subtitle_vern_display" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="author_display" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="author_vern_display" type="string" indexed="true" stored="true" multiValued="true"/>
-   
-   <!-- these fields are also used for display, so they must be stored -->
-   <field name="isbn_t" type="numericID" indexed="true" stored="true" multiValued="true"/>
-   <field name="issn_t" type="numericID" indexed="true" stored="true" multiValued="true"/>
-   <field name="lccn_t" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="language_facet" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="subject_topic_facet" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="subject_era_facet" type="string" indexed="true" stored="true" multiValued="true" />
-   <field name="subject_geo_facet" type="string" indexed="true" stored="true" multiValued="true" />
-   <!-- pub_date is used for facet and display so it must be indexed and stored -->
-   <field name="pub_date" type="string" indexed="true" stored="true" multiValued="true"/>
-   <!-- pub_date sort uses new trie-based int fields, which are recommended for any int and are displayable, sortable, and range-quer
-   we use 'tint' for faster range-queries. -->
-   <field name="pub_date_sort" type="tint" indexed="true" stored="true" multiValued="false"/>
+   <similarity class="org.apache.lucene.search.similarities.BM25Similarity">
+     <str name="b">0.1</str>  <!-- default is 0.75 -->
+     <str name="k1">1.2</str> <!-- default is 1.2 -->
+   </similarity>
 
-   <!-- format is used for facet, display, and choosing which partial to use for the show view, so it must be stored and indexed -->
-   <field name="format" type="string" indexed="true" stored="true" multiValued="true"/>
+  <!--
+  <similarity class="solr.ClassicSimilarityFactory"/>
+  -->
 
-   <field name="suppressed" type="boolean" indexed="true" stored="true" default="false"/>
 
-   <field name="publisher_headings" type="string" indexed="true" stored="true" multiValued="true"/>   
+   <!-- field names should consist of alphanumericID or underscore characters only and
+      not start with a digit.  This is not currently strictly enforced,
+      but other field names will not have first class support from all components
+      and back compatibility is not guaranteed.  Names with both leading and
+      trailing underscores (e.g. _version_) are reserved.
+   -->
 
-   <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
-        will be used if the name matches any of the patterns.
-        RESTRICTION: the glob-like pattern in the name attribute must have
-        a "*" only at the start or the end.
-        EXAMPLE:  name="*_i" will match any field ending in _i (like myid_i, z_i)
-        Longer patterns will be matched first.  if equal size patterns
-        both match, the first appearing in the schema will be used.  -->
-   <dynamicField name="*_i"  type="int"    indexed="true"  stored="true"/>
-   <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
-   <dynamicField name="*_l"  type="long"   indexed="true"  stored="true"/>
-   <dynamicField name="*_t"  type="text"    indexed="true"  stored="true" multiValued="true"/>
-   <dynamicField name="*_txt" type="text_general"    indexed="true"  stored="true" multiValued="true"/>
-   <dynamicField name="*_b"  type="boolean" indexed="true"  stored="true"/>
-   <dynamicField name="*_f"  type="float"  indexed="true"  stored="true"/>
-   <dynamicField name="*_d"  type="double" indexed="true"  stored="true"/>
+   <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
+      or Solr won't start. _version_ and update log are required for SolrCloud
+   -->
+   <field name="_version_" type="long" indexed="true" stored="false" multiValued="false" />
 
-   <!-- Type used to index the lat and lon components for the "location" FieldType -->
-   <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
+   <!-- points to the root document of a block of nested documents. Required for nested
+      document support, may be removed otherwise
+   -->
+   <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
 
-   <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
-   <dynamicField name="*_p"  type="location" indexed="true" stored="true"/>
+   <!-- Only remove the "id" field if you have a very good reason to. While not strictly
+     required, it is highly recommended. A <uniqueKey> is present in almost all Solr
+     installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
+     Do NOT change the type and apply index-time analysis to the <uniqueKey> as it will likely
+     make routing in SolrCloud and document replacement in general fail. Limited _query_ time
+     analysis is possible as long as the indexing process is guaranteed to index the term
+     in a compatible way. Any analysis applied to the <uniqueKey> should _not_ produce multiple
+     tokens
+   -->
+   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
-   <!-- some trie-coded dynamic fields for faster range queries -->
-   <dynamicField name="*_ti" type="tint"    indexed="true"  stored="true"/>
-   <dynamicField name="*_tl" type="tlong"   indexed="true"  stored="true"/>
-   <dynamicField name="*_tf" type="tfloat"  indexed="true"  stored="true"/>
-   <dynamicField name="*_td" type="tdouble" indexed="true"  stored="true"/>
-   <dynamicField name="*_tdt" type="tdate"  indexed="true"  stored="true"/>
-   
-   <dynamicField name="*_pi"  type="pint"    indexed="true"  stored="true"/>
-
-   <dynamicField name="ignored_*" type="ignored" multiValued="true"/>
-   <dynamicField name="attr_*" type="text_general" indexed="true" stored="true" multiValued="true"/>
-
-   <dynamicField name="random_*" type="random" />
-
-   <dynamicField name="*_display" type="string" indexed="false" stored="true" multiValued="true" />
-   <dynamicField name="*_facet" type="string" indexed="true" stored="false" multiValued="true" />
-   <dynamicField name="*_sort" type="alphaOnlySort" indexed="true" stored="false" multiValued="false" />
-   <dynamicField name="*_unstem_search" type="text_general" indexed="true" stored="false" multiValued="true" />
-   <dynamicField name="*spell" type="textSpell" indexed="true" stored="false" multiValued="true" />
-
-   <!-- uncomment the following to ignore any fields that don't already match an existing 
-        field name or dynamic field, rather than reporting them as an error. 
-        alternately, change the type="ignored" to some other type e.g. "text" if you want 
-        unknown fields indexed and/or stored by default --> 
-   <!--dynamicField name="*" type="ignored" multiValued="true" /-->
-   <dynamicField name="*" type="text" multiValued="true" indexed="true"/>
-   
- </fields>
-
- <!-- Field to use to determine and enforce document uniqueness. 
+ <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
    -->
  <uniqueKey>id</uniqueKey>
 
- <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>text</defaultSearchField>
 
- <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
- <solrQueryParser defaultOperator="OR"/>
+ <!-- Set up the non-dynamic fields. For the old-school catalogs, this is everything -->
 
-  <!-- copyField commands copy one field to another at the time a document
-        is added to the index.  It's used either to index the same field differently,
-        or to add multiple fields to the same field for easier/faster searching.  -->
-   <!-- Copy Fields -->
-        
-   <!-- unstemmed fields -->
-   <copyField source="title" dest="title_t"/>
-   <copyField source="title" dest="title_unstem_search"/>
-   <copyField source="subtitle_t" dest="subtitle_unstem_search"/>
-   <copyField source="title_addl_t" dest="title_addl_unstem_search"/>
-   <copyField source="title_added_entry_t" dest="title_added_entry_unstem_search"/>
-   <copyField source="title_series_t" dest="title_series_unstem_search"/>
-   <copyField source="author_t" dest="author_unstem_search"/>
-   <copyField source="author_addl_t" dest="author_addl_unstem_search"/>
-   <copyField source="subject_t" dest="subject_unstem_search"/>
-   <copyField source="subject_addl_t" dest="subject_addl_unstem_search"/>
-   <copyField source="subject_topic_facet" dest="subject_topic_unstem_search"/>
-   <copyField source="sudoc_display" dest="sudoc_t"/>
-   <copyField source="sudoc_display" dest="sudoc_unstem_search"/>
-   <copyField source="publisher_t" dest="publisher_unstem_search"/>
-   
-   <copyField source="series" dest="series_facet"/>
-   <!-- sort fields -->
-   <!-- <copyField source="pub_date" dest="pub_date_sort"/> -->
-   
-        
-   <!-- spellcheck fields -->
-   <!-- default spell check;  should match fields for default request handler -->
-   <!-- it won't work with a copy of a copy field -->
-   <copyField source="title" dest="spell"/>
-   <copyField source="*_t" dest="spell"/>
-   <copyField source="*_facet" dest="spell"/>
-   <!-- title spell check;  should match fields for title request handler -->
-   <copyField source="title" dest="title_spell"/>
-   <copyField source="title_t" dest="title_spell"/>
-   <copyField source="subtitle_t" dest="title_spell"/>
-   <copyField source="addl_titles_t" dest="title_spell"/>
-   <copyField source="title_added_entry_t" dest="title_spell"/>
-   <copyField source="title_series_t" dest="title_spell"/>
-   <!-- author spell check; should match fields for author request handler -->
-   <copyField source="author_t" dest="author_spell"/>
-   <copyField source="author_addl_t" dest="author_spell"/>
-   <!-- subject spell check; should match fields for subject request handler -->
-   <copyField source="subject_topic_facet" dest="subject_spell"/>
-   <copyField source="subject_t" dest="subject_spell"/>
-   <copyField source="subject_addl_t" dest="subject_spell"/>  
-   <!-- sudoc spell check; should match fields for sudoc request handler -->
-   <copyField source="sudoc_t" dest="sudoc_spell"/>
-   
-   <!-- OpenSearch query field should match request handler search fields -->
-   <copyField source="title_t" dest="opensearch_display"/>
-   <copyField source="subtitle_t" dest="opensearch_display"/>
-   <copyField source="addl_titles_t" dest="opensearch_display"/>
-   <copyField source="title_added_entry_t" dest="opensearch_display"/>
-   <copyField source="title_series_t" dest="opensearch_display"/>
-   <copyField source="author_t" dest="opensearch_display"/>
-   <copyField source="author_addl_t" dest="opensearch_display"/>
-   <copyField source="subject_topic_facet" dest="opensearch_display"/>
-   <copyField source="subject_t" dest="opensearch_display"/>
-   <copyField source="subject_addl_t" dest="opensearch_display"/>  
-   <copyField source="sudoc_t" dest="opensearch_display"/>
+ <!-- Core Fields  -->
 
-
-   <!-- Above, multiple source fields are copied to the [text] field. 
-	  Another way to map multiple source fields to the same 
-	  destination field is to use the dynamic field syntax. 
-	  copyField also supports a maxChars to copy setting.  -->
-	   
-   <!-- <copyField source="*_t" dest="text" maxChars="3000"/> -->
-
-   <!-- copy name to alphaNameSort, a field designed for sorting by name -->
-   <!-- <copyField source="name" dest="alphaNameSort"/> -->
+ <field name="enum_chron" type="text" indexed="true" stored="true" multiValued="false"/>
+ <field name="series" type="string" indexed="true" stored="true" multiValued="true"/>
  
+ <field name="text"      type="text"     indexed="true" stored="false" docValues="false"/>
+ <field name="marc" type="string" indexed="false" stored="true" multiValued="false" docValues="false"/>
+ <field name="source_records" type="string" indexed="false" stored="true" multiValued="true" docValues="false"/>
+ <field name="ht_availability" type="string" indexed="true" stored="true" multiValued="false" default="none"/>
+ <field name="ht_ids_fv" type="string" indexed="true" stored="true" multiValued="true"/>
+ <field name="ht_ids_lv" type="string" indexed="true" stored="true" multiValued="true"/>
+ <field name="ancestors" type="string" indexed="true" stored="true" multiValued="true"/>
+ <field name="successors" type="string" indexed="true" stored="true" multiValued="true"/>
+ <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
 
- <!-- Similarity is the scoring routine for each document vs. a query.
-      A custom similarity may be specified here, but the default is fine
-      for most applications.  -->
- <!-- <similarity class="org.apache.lucene.search.DefaultSimilarity"/> -->
- <!-- ... OR ...
-      Specify a SimilarityFactory class name implementation
-      allowing parameters to be used.
- -->
- <!--
- <similarity class="com.example.solr.CustomSimilarityFactory">
-   <str name="paramkey">param value</str>
- </similarity>
- -->
+<!-- title stuff -->
+ <field name="title" type="text" indexed="true"  stored="true"  multiValued="true" />
+ <field name="title_sort" type="exactish" indexed="true"  stored="true" multiValued="false"/>
+ <field name="title_added_entry" type="text"  indexed="true"  stored="true" multiValued="true"/>
+ <field name="title_additional" type="text"  indexed="true"  stored="true" multiValued="true"/>
+ <field name="title_normalized" type="text"  indexed="true"  stored="true" multiValued="true"/>
+ <field name="title_series" type="exactish" indexed="true" stored="true" multiValued="true"/>
+
+<!-- author stuff -->
+ <field name="author" type="text" indexed="true" stored="true" multiValued="true"/>
+ <field name="author_text" type="text_nostem" indexed="true" stored="true" multiValued="true"/>
+ <copyField source="author" dest="author_text"/>
+ <field name="author_additional" type="text_nostem" indexed="true" stored="true" multiValued="true"/>
+ <field name="author_lccns" type="string" indexed="true" stored="true" multiValued="true"/>
+ <field name="added_entry_lccns" type="string" indexed="true" stored="true" multiValued="true"/>
+ <field name="author_sort" type="exactish" indexed="true" stored="false" multiValued="false"/>
+
+<!-- Electronic -->
+ <field name="electronic_resources" type="text" indexed="false" stored="true" multiValued="true"/>
+ <field name="electronic_versions" type="text" indexed="false" stored="true" multiValued="true"/>
+ <field name="related_electronic_resources" type="text" indexed="false" stored="true" multiValued="true"/>
+
+<!-- Identifiers -->
+ <field name="gpo_item_numbers" type="exactish" indexed="true" stored="true" multiValued="true"/>
+ <field name="isbn"         type="isbn"         indexed="true" stored="true"  multiValued="true"/>
+ <field name="issn"         type="numericID"         indexed="true" stored="true"  multiValued="true"/>
+ <field name="lccn"         type="lccn" indexed="true" stored="true"  multiValued="true"/>
+ <field name="oclc"         type="numericID_trim_leading_zeros"        indexed="true" stored="true"  multiValued="true"/>
+ <field name="report_numbers" type="exactish" indexed="true" stored="true" multiValued="true"/>
+
+<!-- publication info -->
+ <field name="publisher" type="text" indexed="true" stored="true" multiValued="true"/>
+ <field name="publisher_all" type="text_nostem" indexed="true" stored="true" multiValued="true"/>
+
+ <field name="pub_date"      type="string" indexed="true" stored="true"  multiValued="true"/>
+ <field name="pub_date_sort" type="int" indexed="true" stored="true" multiValued="false" sortMissingLast="true"/>
+ <copyFeild source="pub_date" dest="pub_date_sort"/>
+
+<!-- Misc. -->
+ <field name="creation_notes" type="string" indexed="false" stored="true" multiValued="false"/>
+ <field name="deprecated_reason" type="string" indexed="false" stored="true" multiValued="false"/>
+ <field name="deprecated_timestamp" type="date" indexed="false" stored="true" multiValued="false"/>
+ <field name="format"       type="string"     indexed="true" stored="true"  multiValued="true"/>
+ <field name="material_type" type="string" indexed="false" stored="true" multiValued="true"/>
+ <field name="subject_topic_facet" type="text_nostem" indexed="true" stored="true" multiValued="true" />
+
+<!-- Call numbers -->
+ <field name="lc_call_numbers"    type="exactish"       indexed="true" stored="true"  multiValued="true"/>
+ <field name="lc_call_numbers_sort"    type="lc_callnumber_sortable"  indexed="true" stored="true"  multiValued="true"/>
+ <field name="lc_call_numbers_search"    type="squashed_prefix"  indexed="true" stored="true"  multiValued="true"/>
+ <copyField source="lc_call_numbers" dest="lc_call_numbers_sort"/>
+ <copyField source="lc_call_numbers" dest="lc_call_numbers_search"/>
+ <field name="sudocs"         type="exactish"       indexed="true" stored="true"  multiValued="true"/>
+
+
+<dynamicField name="*" type="ignored" multiValued="true" />
+ <!-- Insert the dynamic fields -->
+
+<!-- &dynamic_fields;-->
+
 
 
 </schema>
