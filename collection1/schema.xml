@@ -237,7 +237,7 @@
 
  <field name="pub_date"      type="string" indexed="true" stored="true"  multiValued="true"/>
  <field name="pub_date_sort" type="int" indexed="true" stored="true" multiValued="false" sortMissingLast="true"/>
- <copyFeild source="pub_date" dest="pub_date_sort"/>
+ <copyField source="pub_date" dest="pub_date_sort"/>
 
 <!-- Misc. -->
  <field name="creation_notes" type="string" indexed="false" stored="true" multiValued="false"/>
